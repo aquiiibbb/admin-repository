@@ -1,14 +1,22 @@
 const env = (typeof import.meta !== 'undefined' && import.meta.env) || {}
 const defaultBackendUrl = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:5000'
-  : (typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}:5000` : 'http://localhost:5000')
+  : (typeof window !== 'undefined'
+      ? (window.location.hostname.includes('ahaalo.com')
+          ? `${window.location.protocol}//api.ahaalo.com`
+          : `${window.location.protocol}//${window.location.hostname.replace(/^admin\./, 'api.')}`)
+      : 'http://api.ahaalo.com')
 
 const rawApiUrl = String(
   env.VITE_API_BASE_URL || env.REACT_APP_API_URL || env.VITE_API_URL || defaultBackendUrl
 ).replace(/\/+$/, '')
 export const API_ROOT = rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`
 export const HOTEL_APP_URL = String(
-  env.VITE_HOTEL_APP_URL || (typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}:5173` : 'http://localhost:5173')
+  env.VITE_HOTEL_APP_URL || (typeof window !== 'undefined'
+    ? (window.location.hostname.includes('ahaalo.com')
+        ? `${window.location.protocol}//app.ahaalo.com`
+        : `${window.location.protocol}//${window.location.hostname.replace(/^admin\./, 'app.')}`)
+    : 'http://app.ahaalo.com')
 ).replace(/\/+$/, '')
 const SA = `${API_ROOT}/superadmin`
 
